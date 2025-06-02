@@ -1,0 +1,36 @@
+/* sparkles.css */
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    /* radial gradient gives a glowing core */
+    background: radial-gradient(circle, gold 0%, orange 70%, transparent 100%);
+    border-radius: 50%;
+    pointer-events: none;
+    /* glow */
+    filter: drop-shadow(0 0 2px gold) drop-shadow(0 0 4px orange);
+    /* CSS vars we'll override in JS for random direction */
+    --dx: 0px;
+    --dy: 0px;
+    animation: firework 0.8s ease-out forwards;
+}
+
+/* move outward, scale up, then fade */
+@keyframes firework {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        /* halfway out */
+        transform: translate(calc(var(--dx) / 2), calc(var(--dy) / 2)) scale(2);
+    }
+
+    100% {
+        opacity: 0;
+        /* all the way out and big */
+        transform: translate(var(--dx), var(--dy)) scale(4);
+    }
+}

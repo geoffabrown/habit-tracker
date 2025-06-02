@@ -1,22 +1,53 @@
 ﻿// src/components/HabitTracker.jsx
 import React, { useState } from "react";
 import { useHabits } from "../hooks/useHabits";
-import { format } from "date-fns";
-import { parseISO } from "date-fns";
+import { format, parseISO, subDays } from "date-fns";
 import { calculateStreaks } from "../utils/streakUtils";
-import { subDays } from "date-fns";
-
 
 
 const HabitTracker = ({ user }) => {
     const { habits, toggleDay, createHabit } = useHabits(user.uid);
     const [newHabit, setNewHabit] = useState("");
 
-    const today = new Date();
-    const todayKey = format(today, "yyyy-MM-dd");
+    const today = new Date(); // full Date object
+    const todayKey = format(today, "yyyy-MM-dd"); // "2025-05-27"
+
     const daysArray = Array.from({ length: 30 }, (_, i) =>
         format(subDays(today, 29 - i), "yyyy-MM-dd")
     );
+
+    
+    const handleToggle = async (el, habitId, dateKey) => {
+        // 1. update Firestore
+        await toggleDay(habitId, dateKey);
+
+        // 2. spawn sparkles inside `el`
+        spawnSparkles(el);
+    };
+     
+    // 3. the sparkle‐spawning helper
+    function spawnSparkles(container) {
+        const { width, height } = container.getBoundingClientRect();
+
+        for (let i = 0; i < 12; i++) {              // bump count for more bursts
+            const sparkle = document.createElement('span');
+            sparkle.className = 'sparkle';
+
+            // pick a random trajectory up to ±40px
+            const dx = (Math.random() - 0.5) * 80;
+            const dy = (Math.random() - 0.5) * 80;
+            sparkle.style.setProperty('--dx', `${dx}px`);
+            sparkle.style.setProperty('--dy', `${dy}px`);
+
+            // start each in a random spot inside the button
+            sparkle.style.left = Math.random() * width + 'px';
+            sparkle.style.top = Math.random() * height + 'px';
+
+            container.appendChild(sparkle);
+            sparkle.addEventListener('animationend', () => sparkle.remove());
+        }
+    }
+
 
     const handleCreate = () => {
         if (newHabit.trim()) {
@@ -26,8 +57,6 @@ const HabitTracker = ({ user }) => {
     };
 
     return (
-        
-
         <div className="space-y-4">
             <div className="mb-4 flex gap-2">
                 <input
@@ -42,12 +71,11 @@ const HabitTracker = ({ user }) => {
                 >
                     Add Habit
                 </button>
-                
             </div>
 
             {habits.map((habit) => {
                 const { currentStreak, longestStreak } = calculateStreaks(habit.days);
-             
+
                 return (
                     <div key={habit.id} className="mb-6">
                         <h3 className="font-semibold text-lg">
@@ -58,34 +86,43 @@ const HabitTracker = ({ user }) => {
                         </h3>
                         <div className="flex gap-1 overflow-x-auto">
                             {daysArray.map((dateKey) => {
-                                const done = !!habit.days?.[dateKey]; // should now be true/false
+                                const done = !!habit.days?.[dateKey];
                                 const isToday = dateKey === todayKey;
-                                //console.log("Rendering habit:", habit.title, habit.days);
-                                //console.log("Checking day:", dateKey, "→", habit.days?.[dateKey]);
-                                console.log(`${habit.title} | ${dateKey} →`, done);
+
+                                // parse out the day number
+                                let dayNumber = "";
+                                try {
+                                    dayNumber = parseISO(dateKey).getDate();
+                                } catch {
+                                    dayNumber = "?";
+                                }
+
                                 return (
-                                    
                                     <button
                                         key={dateKey}
-                                        className={`w-8 h-8 text-xs rounded transition-all duration-200
-    ${done
+                                        title={dateKey}
+                                        onClick={(e) => handleToggle(e.currentTarget, habit.id, dateKey)}
+                                        className={`
+        relative        /* for sparkles */
+        w-8 h-8         /* fixed size */
+        text-xs rounded 
+        transition-all duration-200
+
+        ${done
                                                 ? "bg-green-600 text-white hover:bg-green-700"
                                                 : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                                             }
-    ${isToday ? "ring-2 ring-blue-400" : ""}
-  `}
-                                        title={dateKey}
-                                        onClick={() => toggleDay(habit.id, dateKey)}
+        ${isToday ? "ring-2 ring-blue-400" : ""}
+      `}
                                     >
-                                        {new Date(dateKey).getDate()}
+                                        {done ? "✓" : dayNumber}
                                     </button>
-
                                 );
                             })}
                         </div>
                     </div>
                 );
-            })}  
+            })}
         </div>
     );
 };
