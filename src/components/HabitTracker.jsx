@@ -136,7 +136,7 @@ const HabitTracker = ({ user }) => {
                                         </button>
                                         <button
                                             onClick={() => handleNoteClick(habit.id, dateKey)}
-                                            className={`mt-1 text-xs ${hasNote ? "text-blue-500" : "text-gray-400"}`}
+                                            className={`note-button ${hasNote ? "text-blue-500" : "text-gray-400"}`}
                                             title={dayData.note || "Add note"}
                                         >
                                             {hasNote ? "📝" : "✎"}
@@ -150,8 +150,8 @@ const HabitTracker = ({ user }) => {
             })}
 
             {selectedDay && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg w-full max-w-md">
+                <div className="modal-overlay">
+                    <div className="modal-content">
                         <h3 className="text-lg font-semibold mb-2">
                             Note for {format(parseISO(selectedDay.dateKey), "MMMM d, yyyy")}
                         </h3>
