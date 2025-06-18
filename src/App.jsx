@@ -48,7 +48,7 @@ function App() {
           MOBILE VIEW
         </div>
         {activeView === 'today' && <MobileHabitView user={user} onViewChange={setActiveView} />}
-        {activeView === 'log' && <HabitLog user={user} />}
+        {activeView === 'log' && <HabitLog user={user} onViewChange={setActiveView} />}
         {activeView === 'insights' && <HabitInsights user={user} />}
         {activeView === 'admin' && user.email === ADMIN_EMAIL && <AdminReport />}
         {!(activeView === 'today' || activeView === 'log' || activeView === 'insights' || (activeView === 'admin' && user.email === ADMIN_EMAIL)) && (

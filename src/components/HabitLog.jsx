@@ -2,7 +2,7 @@ import React from "react";
 import { format, parseISO, isToday, isYesterday, isThisWeek, isThisMonth } from "date-fns";
 import { useHabits } from "../hooks/useHabits";
 
-const HabitLog = ({ user }) => {
+const HabitLog = ({ user, onViewChange }) => {
     const { habits } = useHabits(user.uid);
 
     // Group entries by date
@@ -40,7 +40,7 @@ const HabitLog = ({ user }) => {
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <div className="p-4">
+            <div className="p-4 pb-20">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Habit Log</h2>
                 <div className="space-y-6">
                     {sortedDates.map((dateKey) => (
@@ -91,6 +91,38 @@ const HabitLog = ({ user }) => {
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-around p-2">
+                    <button
+                        onClick={() => onViewChange("today")}
+                        className="flex-1 py-3 text-center text-gray-600 dark:text-gray-400 font-medium"
+                    >
+                        Today
+                    </button>
+                    <button
+                        onClick={() => onViewChange("log")}
+                        className="flex-1 py-3 text-center text-blue-600 dark:text-blue-400 font-medium"
+                    >
+                        Log
+                    </button>
+                    <button
+                        onClick={() => onViewChange("insights")}
+                        className="flex-1 py-3 text-center text-gray-600 dark:text-gray-400"
+                    >
+                        Insights
+                    </button>
+                    {user.email === "geoffabrown@gmail.com" && (
+                        <button
+                            onClick={() => onViewChange("admin")}
+                            className="flex-1 py-3 text-center text-gray-600 dark:text-gray-400"
+                        >
+                            Admin
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
