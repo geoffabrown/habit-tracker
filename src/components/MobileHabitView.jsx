@@ -9,14 +9,15 @@ import { useDarkMode } from '../hooks/useDarkMode';
 const ADMIN_EMAIL = "geoffabrown@gmail.com";
 
 const MobileHabitView = ({ user, onViewChange }) => {
-  const { habits, toggleHabit, addNote } = useHabits(user.uid);
+  const { habits, toggleDay, addNote } = useHabits(user.uid);
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [noteInput, setNoteInput] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const handleToggleHabit = async (habitId) => {
-    await toggleHabit(habitId);
+    const today = format(new Date(), "yyyy-MM-dd");
+    await toggleDay(habitId, today);
   };
 
   const handleShowNote = (habit) => {
