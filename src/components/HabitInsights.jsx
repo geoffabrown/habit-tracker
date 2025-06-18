@@ -104,60 +104,62 @@ const HabitInsights = ({ user }) => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto h-[calc(100vh-200px)] flex flex-col">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Habit Insights</h2>
-                <button
-                    onClick={analyzeHabits}
-                    disabled={isLoading}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                >
-                    {isLoading ? "Analyzing..." : "Get Insights"}
-                </button>
-            </div>
+        <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+            <div className="max-w-4xl mx-auto h-[calc(100vh-200px)] flex flex-col">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Habit Insights</h2>
+                    <button
+                        onClick={analyzeHabits}
+                        disabled={isLoading}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                    >
+                        {isLoading ? "Analyzing..." : "Get Insights"}
+                    </button>
+                </div>
 
-            <div className="flex-grow overflow-y-auto mb-4 space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                {messages.length === 0 ? (
-                    <div className="text-center text-gray-500 dark:text-gray-400">
-                        <p>Ask me about your habits or click "Get Insights" for an analysis.</p>
-                        <p className="mt-2">Try questions like:</p>
-                        <ul className="mt-2 space-y-1">
-                            <li>"What's my most consistent habit?"</li>
-                            <li>"How can I improve my morning routine?"</li>
-                            <li>"What patterns do you notice in my habits?"</li>
-                        </ul>
-                    </div>
-                ) : (
-                    messages.map((msg, index) => (
-                        <div key={index} className={`p-3 rounded-lg ${msg.role === 'user' ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-gray-700'}`}>
-                            <p className="text-gray-900 dark:text-white">{msg.content}</p>
+                <div className="flex-grow overflow-y-auto mb-4 space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    {messages.length === 0 ? (
+                        <div className="text-center text-gray-500 dark:text-gray-400">
+                            <p>Ask me about your habits or click "Get Insights" for an analysis.</p>
+                            <p className="mt-2">Try questions like:</p>
+                            <ul className="mt-2 space-y-1">
+                                <li>"What's my most consistent habit?"</li>
+                                <li>"How can I improve my morning routine?"</li>
+                                <li>"What patterns do you notice in my habits?"</li>
+                            </ul>
                         </div>
-                    ))
-                )}
-                {isLoading && (
-                    <div className="text-center text-gray-500 dark:text-gray-400 animate-pulse">
-                        <p>AI is thinking...</p>
-                    </div>
-                )}
-            </div>
+                    ) : (
+                        messages.map((msg, index) => (
+                            <div key={index} className={`p-3 rounded-lg ${msg.role === 'user' ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                                <p className="text-gray-900 dark:text-white">{msg.content}</p>
+                            </div>
+                        ))
+                    )}
+                    {isLoading && (
+                        <div className="text-center text-gray-500 dark:text-gray-400 animate-pulse">
+                            <p>AI is thinking...</p>
+                        </div>
+                    )}
+                </div>
 
-            <form onSubmit={handleSubmit} className="flex gap-2">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask about your habits..."
-                    className="flex-grow p-2 border rounded bg-white dark:bg-gray-800 dark:text-white"
-                    disabled={isLoading}
-                />
-                <button
-                    type="submit"
-                    disabled={isLoading || !input.trim()}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                >
-                    Send
-                </button>
-            </form>
+                <form onSubmit={handleSubmit} className="flex gap-2">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Ask about your habits..."
+                        className="flex-grow p-2 border rounded bg-white dark:bg-gray-800 dark:text-white"
+                        disabled={isLoading}
+                    />
+                    <button
+                        type="submit"
+                        disabled={isLoading || !input.trim()}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                    >
+                        Send
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

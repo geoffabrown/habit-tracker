@@ -21,7 +21,11 @@ export default function AdminReport() {
             // Get all authenticated users from the server
             const response = await fetch('http://localhost:3001/api/admin/users');
             if (!response.ok) {
-                throw new Error('Failed to fetch authenticated users');
+                let msg = 'Failed to fetch authenticated users';
+                if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                  msg += ' (Are you running the backend server? This will not work in production unless the backend is deployed and the URL is updated.)';
+                }
+                throw new Error(msg);
             }
             const { users: authUsers } = await response.json();
             console.log('Fetched authenticated users:', authUsers.length);

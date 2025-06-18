@@ -42,6 +42,11 @@ const HabitLog = ({ user, onViewChange }) => {
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <div className="p-4 pb-20">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Habit Log</h2>
+                {!onViewChange && (
+                  <div className="mb-4 p-2 bg-yellow-200 text-yellow-900 rounded">
+                    Navigation unavailable: onViewChange prop missing.
+                  </div>
+                )}
                 <div className="space-y-6">
                     {sortedDates.map((dateKey) => (
                         <div key={dateKey} className="relative">
